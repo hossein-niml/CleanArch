@@ -1,8 +1,11 @@
-package UseCase
+package usecases
 
-import Entities._
+import entities._
+import repositories.Callback
 
-abstract class Service
+abstract class Service {
+  val rep: Callback
+}
 
 abstract class AddItemService extends Service{
   def addItem(item: Item): Unit

@@ -1,30 +1,36 @@
-import Entities._
-import UseCase._
+import entities._
+import usecases._
+import datebase._
 
 class CleanArchTest extends munit.FunSuite{
 
-  AddItemUseCase.addItem(Item("this is my first item", false))
-  AddItemUseCase.addItem(Item("2nd item", false))
-  AddItemUseCase.addItem(Item("third item :D", false))
+  val myConfig = Config(DB)
+  val addItemUseCase = myConfig.addItemUseCase()
+  val editItemUseCase = myConfig.editItemUseCase()
+  val getItemUseCase = myConfig.getItemUseCase()
 
-  println(GetItemUseCase.getItem(1))
-  println(GetItemUseCase.getItem(2))
-  println(GetItemUseCase.getItem(3))
+  addItemUseCase.addItem(Item("this is my first item", false))
+  addItemUseCase.addItem(Item("2nd item", false))
+  addItemUseCase.addItem(Item("third item :D", false))
+
+  println(getItemUseCase.getItem(1).show())
+  println(getItemUseCase.getItem(2).show())
+  println(getItemUseCase.getItem(3).show())
   println("##########################")
 
-  EditItemUseCase.editMsg(1, "this is NEWWW first item")
-  EditItemUseCase.editState(2, true)
-  EditItemUseCase.editState(3, true)
+  editItemUseCase.editMsg(1, "this is NEWWW first item")
+  editItemUseCase.editState(2, true)
+  editItemUseCase.editState(3, true)
 
-  println(GetItemUseCase.getItem(1))
-  println(GetItemUseCase.getItem(2))
-  println(GetItemUseCase.getItem(3))
+  println(getItemUseCase.getItem(1).show())
+  println(getItemUseCase.getItem(2).show())
+  println(getItemUseCase.getItem(3).show())
   println("##########################")
 
-  EditItemUseCase.editState(3, false)
+  editItemUseCase.editState(3, false)
 
-  println(GetItemUseCase.getItem(1))
-  println(GetItemUseCase.getItem(2))
-  println(GetItemUseCase.getItem(3))
+  println(getItemUseCase.getItem(1).show())
+  println(getItemUseCase.getItem(2).show())
+  println(getItemUseCase.getItem(3).show())
   println("##########################")
 }

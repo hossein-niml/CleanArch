@@ -1,8 +1,11 @@
-package Repositories
+package repositories
 
-import Entities._
+import entities._
+import datebase._
 
-abstract class Callback
+abstract class Callback {
+  val dataBase: DB
+}
 
 abstract class AddItemCallback extends Callback {
   def addItem(item: Item): Unit
