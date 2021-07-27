@@ -1,8 +1,8 @@
 package entities
 
-class Item(_body: String, _state: Boolean) {
-  private val body = _body
-  private val state = _state
+class Item(itemBody: String, itemState: Boolean) {
+  private val body = itemBody
+  private val state = itemState
   def getBody(): String = body
   def getState(): Boolean = state
   def show(): String = body ++ " , " ++ state.toString

@@ -2,8 +2,8 @@ package repositories
 
 import datebase._
 
-class EditItemRepository(dataStore: DB) extends Callback.EditItemCallback {
-  override val dataBase: DB = dataStore
+class EditItemRepository(dataStore: DataBase) extends Callback.EditItemCallback {
+  override val dataBase: DataBase = dataStore
   override def editBody(id: Int, newBody: String): Unit = {
     dataBase.editBody(id, newBody)
   }
@@ -14,7 +14,7 @@ class EditItemRepository(dataStore: DB) extends Callback.EditItemCallback {
 }
 
 object EditItemRepository {
-  def apply(dataStore: DB): EditItemRepository = {
+  def apply(dataStore: DataBase): EditItemRepository = {
     new EditItemRepository(dataStore)
   }
 }

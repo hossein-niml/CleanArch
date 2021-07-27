@@ -4,7 +4,7 @@ import entities._
 import datebase._
 
 sealed abstract class Callback {
-  val dataBase: DB
+  val dataBase: DataBase
 }
 
 object Callback {

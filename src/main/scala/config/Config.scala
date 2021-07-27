@@ -21,7 +21,7 @@ object Config {
     new Config()
   }
 
-  private val dataBase = DB.myDataBase
+  private val dataBase = DataBase.myDataBase
   private val addItemRep: Callback.AddItemCallback = AddItemRepository(dataBase)
   private val getItemRep: Callback.GetItemCallback = GetItemRepository(dataBase)
   private val editItemRep: Callback.EditItemCallback = EditItemRepository(dataBase)

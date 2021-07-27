@@ -4,7 +4,7 @@ import entities._
 
 import scala.annotation.tailrec
 
-sealed abstract class DB {
+sealed abstract class DataBase {
   def getItem(id: Int): Item
 
   def addItem(item: Item): Unit
@@ -14,9 +14,9 @@ sealed abstract class DB {
   def editState(id: Int, newState: Boolean): Unit
 }
 
-object DB {
+object DataBase {
 
-  class myDataBase extends DB {
+  class myDataBase extends DataBase {
     private var itemsMap: Map[Int, Item] = Map.empty
 
     @tailrec
