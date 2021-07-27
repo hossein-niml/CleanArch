@@ -7,15 +7,20 @@ sealed abstract class Callback {
   val dataBase: DB
 }
 
-abstract class AddItemCallback extends Callback {
-  def addItem(item: Item): Unit
-}
+object Callback {
 
-abstract class GetItemCallback extends Callback {
-  def getItem(id: Int): Item
-}
+  abstract class AddItemCallback extends Callback {
+    def addItem(body: String, state: Boolean): Unit
+  }
 
-abstract class EditItemCallback extends Callback {
-  def editMsg(id: Int, newMsg: String): Unit
-  def editState(id: Int, newState: Boolean): Unit
+  abstract class GetItemCallback extends Callback {
+    def getItem(id: Int): Item
+  }
+
+  abstract class EditItemCallback extends Callback {
+    def editBody(id: Int, newBody: String): Unit
+
+    def editState(id: Int, newState: Boolean): Unit
+  }
+
 }

@@ -3,7 +3,7 @@ package usecases
 import entities._
 import repositories._
 
-class GetItemUseCase(getItemRep: GetItemCallback) extends GetItemService {
+class GetItemUseCase(getItemRep: Callback.GetItemCallback) extends Service.GetItemService {
   override val rep = getItemRep
   override def getItem(id: Int): Item = {
     rep.getItem(id)
@@ -11,7 +11,7 @@ class GetItemUseCase(getItemRep: GetItemCallback) extends GetItemService {
 }
 
 object GetItemUseCase {
-  def apply(rep: GetItemCallback): GetItemUseCase = {
+  def apply(rep: Callback.GetItemCallback): GetItemUseCase = {
     new GetItemUseCase(rep)
   }
 }

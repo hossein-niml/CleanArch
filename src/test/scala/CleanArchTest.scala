@@ -1,36 +1,33 @@
-import entities._
+import config._
 import usecases._
-import datebase._
 
-class CleanArchTest extends munit.FunSuite{
+class CleanArchTest extends munit.FunSuite {
+  def showItems(getItemUseCase: Service.GetItemService, idRange: Range): Unit = {
+    val ids = idRange.toVector
+    for {
+      id <- ids
+    } println(getItemUseCase.getItem(id).show())
+    println("##########################")
+  }
 
-  val myConfig = Config(myDataBase)
-  val addItemUseCase = myConfig.addItemUseCase()
-  val editItemUseCase = myConfig.editItemUseCase()
-  val getItemUseCase = myConfig.getItemUseCase()
+  val myConfig: Config = Config()
+  val addItemUseCase: Service.AddItemService = myConfig.addItemUseCase()
+  val editItemUseCase: Service.EditItemService = myConfig.editItemUseCase()
+  val getItemUseCase: Service.GetItemService = myConfig.getItemUseCase()
 
-  addItemUseCase.addItem(Item("this is my first item", false))
-  addItemUseCase.addItem(Item("2nd item", false))
-  addItemUseCase.addItem(Item("third item :D", false))
+  addItemUseCase.addItem(body = "this is my first item", state = false)
+  addItemUseCase.addItem(body = "2nd item", state = false)
+  addItemUseCase.addItem(body = "third item :D", state = false)
 
-  println(getItemUseCase.getItem(1).show())
-  println(getItemUseCase.getItem(2).show())
-  println(getItemUseCase.getItem(3).show())
-  println("##########################")
+  showItems(getItemUseCase, idRange = 1 to 3)
 
-  editItemUseCase.editMsg(1, "this is NEWWW first item")
-  editItemUseCase.editState(2, true)
-  editItemUseCase.editState(3, true)
+  editItemUseCase.editBody(id = 1, newBody = "this is NEWWW first item")
+  editItemUseCase.editState(id = 2, newState = true)
+  editItemUseCase.editState(id = 3, newState = true)
 
-  println(getItemUseCase.getItem(1).show())
-  println(getItemUseCase.getItem(2).show())
-  println(getItemUseCase.getItem(3).show())
-  println("##########################")
+  showItems(getItemUseCase, idRange = 1 to 3)
 
-  editItemUseCase.editState(3, false)
+  editItemUseCase.editState(id = 3, newState = false)
 
-  println(getItemUseCase.getItem(1).show())
-  println(getItemUseCase.getItem(2).show())
-  println(getItemUseCase.getItem(3).show())
-  println("##########################")
+  showItems(getItemUseCase, idRange = 1 to 3)
 }

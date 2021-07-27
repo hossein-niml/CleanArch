@@ -3,15 +3,15 @@ package repositories
 import entities.Item
 import datebase._
 
-class GetItemRepository(_dataBase: DB) extends GetItemCallback {
-  override val dataBase: DB = _dataBase
+class GetItemRepository(dataStore: DB) extends Callback.GetItemCallback {
+  override val dataBase: DB = dataStore
   override def getItem(id: Int): Item = {
     dataBase.getItem(id)
   }
 }
 
 object GetItemRepository {
-  def apply(dataBase: DB): GetItemRepository = {
-    new GetItemRepository(dataBase)
+  def apply(dataStore: DB): GetItemRepository = {
+    new GetItemRepository(dataStore)
   }
 }

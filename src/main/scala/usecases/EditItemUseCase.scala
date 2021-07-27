@@ -2,10 +2,10 @@ package usecases
 
 import repositories._
 
-class EditItemUseCase(editItemRep: EditItemCallback) extends EditItemService {
+class EditItemUseCase(editItemRep: Callback.EditItemCallback) extends Service.EditItemService {
   override val rep = editItemRep
-  override def editMsg(id:Int, newMsg: String): Unit = {
-    rep.editMsg(id, newMsg)
+  override def editBody(id:Int, newMsg: String): Unit = {
+    rep.editBody(id, newMsg)
   }
 
   override def editState(id: Int, newState: Boolean): Unit = {
@@ -14,7 +14,7 @@ class EditItemUseCase(editItemRep: EditItemCallback) extends EditItemService {
 }
 
 object EditItemUseCase {
-  def apply(rep: EditItemCallback): EditItemUseCase = {
+  def apply(rep: Callback.EditItemCallback): EditItemUseCase = {
     new EditItemUseCase(rep)
   }
 }

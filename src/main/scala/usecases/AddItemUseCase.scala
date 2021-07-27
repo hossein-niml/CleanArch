@@ -3,15 +3,15 @@ package usecases
 import entities._
 import repositories._
 
-class AddItemUseCase(addItemRep: AddItemCallback) extends AddItemService {
+class AddItemUseCase(addItemRep: Callback.AddItemCallback) extends Service.AddItemService {
   override val rep = addItemRep
-  override def addItem(item: Item): Unit = {
-    rep.addItem(item)
+  override def addItem(body: String, state: Boolean): Unit = {
+    rep.addItem(body, state)
   }
 }
 
 object AddItemUseCase {
-  def apply(rep: AddItemCallback): AddItemUseCase = {
+  def apply(rep: Callback.AddItemCallback): AddItemUseCase = {
     new AddItemUseCase(rep)
   }
 }
