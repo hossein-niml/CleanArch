@@ -6,7 +6,7 @@ class CleanArchTest extends munit.FunSuite {
     val ids = idRange.toVector
     for {
       id <- ids
-    } println(getItemUseCase.getItem(id).show())
+    } println(getItemUseCase.getItem(id).show)
     println("##########################")
   }
 

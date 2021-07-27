@@ -4,7 +4,7 @@ import entities._
 import repositories._
 
 class GetItemUseCase(getItemRep: Callback.GetItemCallback) extends Service.GetItemService {
-  override val rep = getItemRep
+  override val rep: Callback.GetItemCallback = getItemRep
   override def getItem(id: Int): Item = {
     rep.getItem(id)
   }

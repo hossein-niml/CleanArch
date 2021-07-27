@@ -34,13 +34,13 @@ object DataBase {
 
     override def editBody(id: Int, newBody: String): Unit = {
       val prevItem = itemsMap(id)
-      val newItemsMap = itemsMap.-(id) + (id -> Item(newBody, prevItem.getState()))
+      val newItemsMap = itemsMap.-(id) + (id -> Item(newBody, prevItem.getState))
       itemsMap = newItemsMap
     }
 
     override def editState(id: Int, newState: Boolean): Unit = {
       val prevItem = itemsMap(id)
-      val newItemsMap = itemsMap.-(id) + (id -> Item(prevItem.getBody(), newState))
+      val newItemsMap = itemsMap.-(id) + (id -> Item(prevItem.getBody, newState))
       itemsMap = newItemsMap
     }
 
