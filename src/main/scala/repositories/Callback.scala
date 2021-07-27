@@ -3,7 +3,7 @@ package repositories
 import entities._
 import datebase._
 
-abstract class Callback {
+sealed abstract class Callback {
   val dataBase: DB
 }
 

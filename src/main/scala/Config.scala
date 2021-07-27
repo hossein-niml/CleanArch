@@ -4,15 +4,15 @@ import usecases._
 
 class Config(_dataBase: DB) {
   private val dataBase = _dataBase
-  private val addItemRep: AddItemRepository = AddItemRepository(dataBase)
-  private val getItemRep: GetItemRepository = GetItemRepository(dataBase)
-  private val editItemRep: EditItemRepository = EditItemRepository(dataBase)
+  private val addItemRep: AddItemCallback = AddItemRepository(dataBase)
+  private val getItemRep: GetItemCallback = GetItemRepository(dataBase)
+  private val editItemRep: EditItemCallback = EditItemRepository(dataBase)
 
-  def addItemUseCase(): AddItemUseCase = AddItemUseCase(addItemRep)
+  def addItemUseCase(): AddItemService = AddItemUseCase(addItemRep)
 
-  def editItemUseCase(): EditItemUseCase = EditItemUseCase(editItemRep)
+  def editItemUseCase(): EditItemService = EditItemUseCase(editItemRep)
 
-  def getItemUseCase(): GetItemUseCase = GetItemUseCase(getItemRep)
+  def getItemUseCase(): GetItemService = GetItemUseCase(getItemRep)
 
 }
 

@@ -3,7 +3,7 @@ package usecases
 import entities._
 import repositories.Callback
 
-abstract class Service {
+sealed abstract class Service {
   val rep: Callback
 }
 

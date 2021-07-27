@@ -4,7 +4,7 @@ import datebase._
 
 class CleanArchTest extends munit.FunSuite{
 
-  val myConfig = Config(DB)
+  val myConfig = Config(myDataBase)
   val addItemUseCase = myConfig.addItemUseCase()
   val editItemUseCase = myConfig.editItemUseCase()
   val getItemUseCase = myConfig.getItemUseCase()
