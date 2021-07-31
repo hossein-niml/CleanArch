@@ -10,10 +10,10 @@ class CleanArchTest extends munit.FunSuite {
     println("##########################")
   }
 
-  val myConfig: Config = Config()
-  val addItemUseCase: Service.AddItemService = myConfig.addItemUseCase()
-  val editItemUseCase: Service.EditItemService = myConfig.editItemUseCase()
-  val getItemUseCase: Service.GetItemService = myConfig.getItemUseCase()
+  val myConfig: Config = Config.ManualConfig
+  val addItemUseCase: Service.AddItemService = myConfig.getAddItemUseCase
+  val editItemUseCase: Service.EditItemService = myConfig.getEditItemUseCase
+  val getItemUseCase: Service.GetItemService = myConfig.getGetItemUseCase
 
   addItemUseCase.addItem(body = "this is my first item", state = false)
   addItemUseCase.addItem(body = "2nd item", state = false)

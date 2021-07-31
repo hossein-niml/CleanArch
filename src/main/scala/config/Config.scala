@@ -4,25 +4,37 @@ import datebase._
 import repositories._
 import usecases._
 
-class Config() {
 
-  import Config._
+sealed abstract class Config {
+  val dataBase: DataBase
+  val addItemRep: Callback.AddItemCallback
+  val getItemRep: Callback.GetItemCallback
+  val editItemRep: Callback.EditItemCallback
 
-  def addItemUseCase(): Service.AddItemService = AddItemUseCase(addItemRep)
+  def getAddItemUseCase: Service.AddItemService
 
-  def editItemUseCase(): Service.EditItemService = EditItemUseCase(editItemRep)
+  def getEditItemUseCase: Service.EditItemService
 
-  def getItemUseCase(): Service.GetItemService = GetItemUseCase(getItemRep)
-
+  def getGetItemUseCase: Service.GetItemService
 }
 
-object Config {
-  def apply(): Config = {
-    new Config()
-  }
 
-  private val dataBase = DataBase.myDataBase
-  private val addItemRep: Callback.AddItemCallback = AddItemRepository(dataBase)
-  private val getItemRep: Callback.GetItemCallback = GetItemRepository(dataBase)
-  private val editItemRep: Callback.EditItemCallback = EditItemRepository(dataBase)
+
+
+object Config {
+  class ManualConfig extends Config {
+
+    override val dataBase: DataBase = DataBase.myDataBase
+    override val addItemRep: Callback.AddItemCallback = AddItemRepository(dataBase)
+    override val getItemRep: Callback.GetItemCallback = GetItemRepository(dataBase)
+    override val editItemRep: Callback.EditItemCallback = EditItemRepository(dataBase)
+
+    override def getAddItemUseCase: Service.AddItemService = AddItemUseCase(addItemRep)
+
+    override def getEditItemUseCase: Service.EditItemService = EditItemUseCase(editItemRep)
+
+    override def getGetItemUseCase: Service.GetItemService = GetItemUseCase(getItemRep)
+
+  }
+  object ManualConfig extends ManualConfig
 }
