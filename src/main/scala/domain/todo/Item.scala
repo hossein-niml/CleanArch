@@ -1,4 +1,4 @@
-package entities
+package domain.todo
 
 class Item(itemBody: String, itemState: Boolean) {
   private val body = itemBody
