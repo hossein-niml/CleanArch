@@ -3,8 +3,8 @@ package contract.service.todo
 import contract.service.Service
 import domain.todo._
 
-abstract class GetItemService extends Service[GetItemService.Req, Item]
+abstract class GetItemService extends Service[GetItemService.Request, Item]
 
 object GetItemService {
-  case class Req(id: Int)
+  case class Request(id: Int)
 }

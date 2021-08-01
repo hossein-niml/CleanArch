@@ -5,7 +5,7 @@ import contract.service.todo._
 
 class EditBodyUseCase(thisRep: ItemCallback) extends EditBodyService {
   override val rep: ItemCallback = thisRep
-  override def call(req: EditBodyService.Req): Unit = {
+  override def call(req: EditBodyService.Request): Unit = {
     rep.editBody(req.id, req.newBody)
   }
 }

@@ -2,8 +2,8 @@ package contract.service
 
 import contract.callback.todo._
 
-abstract class Service[Req, Res] {
+abstract class Service[Request, Response] {
   val rep: ItemCallback
 
-  def call(req: Req): Res
+  def call(req: Request): Response
 }

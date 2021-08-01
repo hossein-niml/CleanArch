@@ -2,8 +2,8 @@ package contract.service.todo
 
 import contract.service.Service
 
-abstract class EditStateService extends Service[EditStateService.Req, Unit]
+abstract class EditStateService extends Service[EditStateService.Request, Unit]
 
 object EditStateService {
-  case class Req(id: Int, newState: Boolean)
+  case class Request(id: Int, newState: Boolean)
 }

@@ -2,8 +2,8 @@ package contract.service.todo
 
 import contract.service.Service
 
-abstract class EditBodyService extends Service[EditBodyService.Req, Unit]
+abstract class EditBodyService extends Service[EditBodyService.Request, Unit]
 
 object EditBodyService {
-  case class Req(id: Int, newBody: String)
+  case class Request(id: Int, newBody: String)
 }

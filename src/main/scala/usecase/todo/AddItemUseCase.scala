@@ -5,7 +5,7 @@ import contract.service.todo._
 
 class AddItemUseCase(thisRep: ItemCallback) extends AddItemService {
   override val rep: ItemCallback = thisRep
-  override def call(req: AddItemService.Req): Unit = {
+  override def call(req: AddItemService.Request): Unit = {
     rep.add(req.body, req.state)
   }
 }

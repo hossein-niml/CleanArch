@@ -2,8 +2,8 @@ package contract.service.todo
 
 import contract.service.Service
 
-abstract class AddItemService extends Service[AddItemService.Req, Unit]
+abstract class AddItemService extends Service[AddItemService.Request, Unit]
 
 object AddItemService {
-  case class Req(body: String, state: Boolean)
+  case class Request(body: String, state: Boolean)
 }

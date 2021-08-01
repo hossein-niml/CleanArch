@@ -16,19 +16,19 @@ sealed abstract class Config {
   val getItemService: GetItemService
 
   def addItem(body: String, state: Boolean): Unit = {
-    addItemService.call(AddItemService.Req(body, state))
+    addItemService.call(AddItemService.Request(body, state))
   }
 
   def editState(id: Int, newState: Boolean): Unit = {
-    editStateService.call(EditStateService.Req(id, newState))
+    editStateService.call(EditStateService.Request(id, newState))
   }
 
   def editBody(id: Int, newBody: String): Unit = {
-    editBodyService.call(EditBodyService.Req(id, newBody))
+    editBodyService.call(EditBodyService.Request(id, newBody))
   }
 
   def getItem(id: Int): Item = {
-    getItemService.call(GetItemService.Req(id))
+    getItemService.call(GetItemService.Request(id))
   }
 }
 
