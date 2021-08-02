@@ -8,13 +8,15 @@ abstract class UserCallback {
 
   def add(username: String, password: String): Unit
 
-  def get(id: Int): Option[Session]
+  def getById(id: Int): Option[Session]
+
+  def getByName(username: String): Option[User]
 
   def remove(id: Int): Unit
 
   def update(user: User): Unit
 
-  def signIn(username: String, password: String): Unit
+  def signIn(id: Int): Unit
 
   def signOut(id: Int): Unit
 }

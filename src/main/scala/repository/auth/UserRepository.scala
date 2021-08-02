@@ -11,8 +11,12 @@ class UserRepository(dataStore: DataBase) extends UserCallback {
     dataBase.addUser(username, password)
   }
 
-  override def get(id: Int): Option[Session] = {
-    dataBase.getUser(id)
+  override def getById(id: Int): Option[Session] = {
+    dataBase.getUserById(id)
+  }
+
+  override def getByName(username: String): Option[User] = {
+    dataBase.getUserByName(username)
   }
 
   override def remove(id: Int): Unit = {
@@ -23,8 +27,8 @@ class UserRepository(dataStore: DataBase) extends UserCallback {
     dataBase.updateUser(user)
   }
 
-  override def signIn(username: String, password: String): Unit = {
-    dataBase.signInUser(username, password)
+  override def signIn(id: Int): Unit = {
+    dataBase.signInUser(id)
   }
 
   override def signOut(id: Int): Unit = {
