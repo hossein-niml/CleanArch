@@ -6,11 +6,11 @@ import modules.database._
 abstract class ItemCallback {
   val dataBase: DataBase
 
-  def add(body: String, state: Boolean): Unit
+  def add(userId: Int, body: String, state: Boolean): Unit
 
-  def get(id: Int): Item
+  def get(userId: Int, id: Int): Option[Item]
 
-  def editBody(id: Int, newBody: String): Unit
+  def editBody(userId: Int, id: Int, newBody: String): Unit
 
-  def editState(id: Int, newState: Boolean): Unit
+  def editState(userId: Int, id: Int, newState: Boolean): Unit
 }

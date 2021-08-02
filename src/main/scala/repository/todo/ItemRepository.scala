@@ -7,20 +7,20 @@ import domain.todo._
 class ItemRepository(dataStore: DataBase) extends ItemCallback {
   override val dataBase: DataBase = dataStore
 
-  override def add(body: String, state: Boolean): Unit = {
-    dataBase.addItem(Item(body, state))
+  override def add(userId: Int, body: String, state: Boolean): Unit = {
+    dataBase.addItem(userId, Item(body, state))
   }
 
-  override def get(id: Int): Item = {
-    dataBase.getItem(id)
+  override def get(userId: Int, id: Int): Option[Item] = {
+    dataBase.getItem(userId, id)
   }
 
-  override def editBody(id: Int, newBody: String): Unit = {
-    dataBase.editBody(id, newBody)
+  override def editBody(userId: Int, id: Int, newBody: String): Unit = {
+    dataBase.editBody(userId, id, newBody)
   }
 
-  override def editState(id: Int, newState: Boolean): Unit = {
-    dataBase.editState(id, newState)
+  override def editState(userId: Int, id: Int, newState: Boolean): Unit = {
+    dataBase.editState(userId, id, newState)
   }
 }
 

@@ -1,31 +1,47 @@
 import modules.config._
-import contract.service.todo._
-import usecase.todo._
 
 class CleanArchTest extends munit.FunSuite {
-  def showItems(config: Config, idRange: Range): Unit = {
-    val ids = idRange.toVector
+  def showItems(toDo: Config, userId: Int, itemsIdRange: Range): Unit = {
+    val ids = itemsIdRange.toVector
     for {
       id <- ids
-    } println(config.getItem(id).show)
+    } println(toDo.getItem(userId, id).get.show)
     println("##########################")
   }
 
-  val myConfig: Config = Config.ManualConfig
+  val toDo: Config = Config.ManualConfig
 
-  myConfig.addItem(body = "this is my first item", state = false)
-  myConfig.addItem(body = "2nd item", state = false)
-  myConfig.addItem(body = "third item :D", state = false)
+  //sign up 2 users
+  toDo.signUp(username = "hossein", password = "123456") //userId = 1
+  toDo.signUp(username = "ali", password = "000") //userId = 2
 
-  showItems(myConfig, idRange = 1 to 3)
+  toDo.signIn(username = "hossein", password = "123456") //hossein signed in
 
-  myConfig.editBody(id = 1, newBody = "this is NEWWW first item")
-  myConfig.editState(id = 2, newState = true)
-  myConfig.editState(id = 3, newState = true)
+  //add items for hossein
+  toDo.addItem(userId = 1, body = "hossein's first item", state = false)
+  toDo.addItem(userId = 1, body = "hossein's second item", state = false)
+  toDo.addItem(userId = 1, body = "hossein's third item :D", state = false)
 
-  showItems(myConfig, idRange = 1 to 3)
 
-  myConfig.editState(id = 3, newState = false)
+  showItems(toDo, userId = 1, itemsIdRange = 1 to 3) //show hossein's items
 
-  showItems(myConfig, idRange = 1 to 3)
+  toDo.signIn(username = "ali", password = "000") //ali signed in
+
+  //add items for ali
+  toDo.addItem(userId = 2, body = "ali's first item", state = false)
+  toDo.addItem(userId = 2, body = "ali's second item", state = false)
+
+  showItems(toDo, userId = 2, itemsIdRange = 1 to 1) //show ali's items
+
+  //edit hossein's items
+  toDo.editState(userId = 1, id = 1, newState = true)
+  toDo.editBody(userId = 1, id = 2, newBody = "hossein is CHANGING second item")
+
+  showItems(toDo, userId = 1, itemsIdRange = 1 to 3) //show hossein's items
+
+  toDo.signOut(id = 1) //hossein signed out
+  toDo.signIn(username = "hossein", password = "123456") //hossein signed in again
+
+  toDo.addItem(userId = 1, body = "hossein'n new item", state = false)
+  showItems(toDo, userId = 1, itemsIdRange = 1 to 4)
 }

@@ -5,5 +5,5 @@ import contract.service.Service
 abstract class EditBodyService extends Service[EditBodyService.Request, Unit]
 
 object EditBodyService {
-  case class Request(id: Int, newBody: String)
+  case class Request(userId: Int, id: Int, newBody: String)
 }
