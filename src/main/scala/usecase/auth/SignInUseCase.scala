@@ -9,11 +9,10 @@ class SignInUseCase(thisRep: UserCallback) extends SignInService {
 
   override def call(req: SignInService.Request): Unit = {
     val user = rep.getByName(req.username).getOrElse(throw Exceptions.invalidUserName)
-    if (user.password != req.password) {
-      throw Exceptions.invalidPassword
-    } else {
-      rep.signIn(user.id)
-    }
+    val isLogin = rep.getById(user.id).getOrElse(throw Exceptions.userNotFound).isLogin
+    if (isLogin) throw Exceptions.reSignIn(req.username)
+    if (user.password != req.password) throw Exceptions.invalidPassword
+    rep.signIn(user.id)
   }
 }
 

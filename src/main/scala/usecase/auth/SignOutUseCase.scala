@@ -8,9 +8,9 @@ class SignOutUseCase(thisRep: UserCallback) extends SignOutService {
   val rep: UserCallback = thisRep
 
   override def call(req: SignOutService.Request): Unit = {
-    val userOption = rep.getById(req.userID)
-    userOption match {
-      case Some(_) => rep.signOut(req.userID)
+    val sessionOption = rep.getById(req.userID)
+    sessionOption match {
+      case Some(session) => if(session.isLogin) rep.signOut(req.userID) else throw Exceptions.reSignOut(req.userID)
       case _ => throw Exceptions.userNotFound
     }
   }
