@@ -42,6 +42,6 @@ class CleanArchTest extends munit.FunSuite {
   toDo.signOut(id = 1) //hossein signed out
   toDo.signIn(username = "hossein", password = "123456") //hossein signed in again
 
-  toDo.addItem(userId = 1, body = "hossein'n new item", state = false)
-  showItems(toDo, userId = 1, itemsIdRange = 1 to 4)
+  toDo.addItem(userId = 1, body = "hossein's new item", state = false)
+  showItems(toDo, userId = 1, itemsIdRange = 1 to 4) //show hossein's items
 }
