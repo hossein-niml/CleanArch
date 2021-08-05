@@ -4,20 +4,14 @@ import contract.service.auth._
 import contract.callback.auth._
 import modules.exceptions._
 
-class SignInUseCase(thisRep: UserCallback) extends SignInService {
-  val rep: UserCallback = thisRep
+class SignInUseCase(rep: UserCallback) extends SignInService {
 
   override def call(req: SignInService.Request): Unit = {
-    val user = rep.getByName(req.username).getOrElse(throw Exceptions.invalidUserName)
-    val isLogin = rep.getById(user.id).getOrElse(throw Exceptions.userNotFound).isLogin
-    if (isLogin) throw Exceptions.reSignIn(req.username)
+    val user = rep.getUserByName(req.username).getOrElse(throw Exceptions.invalidUserName)
+    val session = rep.getSessionById(user.id).getOrElse(throw Exceptions.userNotFound)
+    if (session.isLogin) throw Exceptions.reSignIn(req.username)
     if (user.password != req.password) throw Exceptions.invalidPassword
-    rep.signIn(user.id)
+    rep.updateSession(user.id, session.setLogin(true))
   }
-}
 
-object SignInUseCase {
-  def apply(thisRep: UserCallback): SignInUseCase = {
-    new SignInUseCase(thisRep)
-  }
 }

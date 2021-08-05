@@ -1,15 +1,13 @@
 package domain.todo
 
-class Item(itemBody: String, itemState: Boolean) {
-  private val body = itemBody
-  private val state = itemState
-  def getBody: String = body
-  def getState: Boolean = state
-  def show: String = body ++ " , " ++ state.toString
-}
-
-object Item {
-  def apply(body: String, state: Boolean): Item = {
-    new Item(body, state)
+case class Item(body: String, state: Boolean) {
+  def setBody(body: String): Item = {
+    copy(body = body)
   }
+
+  def setState(state: Boolean): Item = {
+    copy(state = state)
+  }
+
+  override def toString: String = s"$body , $state"
 }

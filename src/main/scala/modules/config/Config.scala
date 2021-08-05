@@ -4,6 +4,8 @@ import contract.callback.auth._
 import contract.callback.todo._
 import contract.service.todo._
 import contract.service.auth._
+import domain.auth._
+import domain.todo._
 import modules.database._
 import repository.todo._
 import repository.auth._
@@ -12,8 +14,10 @@ import usecase.auth._
 import domain.todo._
 
 
-sealed abstract class Config {
-  val dataBase: DataBase
+abstract class Config {
+  val users: DataBase[User]
+  val sessions: DataBase[Session]
+  val items: DataBase[Map[Int, Item]]
   val itemRep: ItemCallback
   val userRep: UserCallback
   val addItemService: AddItemService
@@ -23,50 +27,29 @@ sealed abstract class Config {
   val signInService: SignInService
   val signOutService: SignOutService
   val signUpService: SignUpService
-
-  def addItem(userId: Int, body: String, state: Boolean): Unit = {
-    addItemService.call(AddItemService.Request(userId, body, state))
-  }
-
-  def editState(userId: Int, id: Int, newState: Boolean): Unit = {
-    editStateService.call(EditStateService.Request(userId, id, newState))
-  }
-
-  def editBody(userId: Int, id: Int, newBody: String): Unit = {
-    editBodyService.call(EditBodyService.Request(userId, id, newBody))
-  }
-
-  def getItem(userId: Int, id: Int): Option[Item] = {
-    getItemService.call(GetItemService.Request(userId, id))
-  }
-
-  def signIn(username: String, password: String): Unit = {
-    signInService.call(SignInService.Request(username, password))
-  }
-
-  def signUp(username: String, password: String): Unit = {
-    signUpService.call(SignUpService.Request(username, password))
-  }
-
-  def signOut(id: Int): Unit = {
-    signOutService.call(SignOutService.Request(id))
-  }
-
 }
 
 
 object Config {
   class ManualConfig extends Config {
-    override val dataBase: DataBase = DataBase.myDataBase
-    override val itemRep: ItemCallback = ItemRepository(dataBase)
-    override val userRep: UserCallback = UserRepository(dataBase)
-    override val addItemService: AddItemService = AddItemUseCase(itemRep, userRep)
-    override val editStateService: EditStateService = EditStateUseCase(itemRep, userRep)
-    override val editBodyService: EditBodyService = EditBodyUseCase(itemRep, userRep)
-    override val getItemService: GetItemService = GetItemUseCase(itemRep, userRep)
-    override val signInService: SignInService = SignInUseCase(userRep)
-    override val signOutService: SignOutService = SignOutUseCase(userRep)
-    override val signUpService: SignUpService = SignUpUseCase(userRep)
+
+    //DataBases
+    override val users: DataBase[User] = new DataBase[User]
+    override val sessions: DataBase[Session] = new DataBase[Session]
+    override val items: DataBase[Map[Int, Item]] = new DataBase[Map[Int, Item]]
+
+    //Repositories
+    override val itemRep: ItemCallback = ItemRepository(items)
+    override val userRep: UserCallback = UserRepository(users, sessions, items)
+
+    //Services
+    override val addItemService: AddItemService = new AddItemUseCase(itemRep)
+    override val editStateService: EditStateService = new EditStateUseCase(itemRep)
+    override val editBodyService: EditBodyService = new EditBodyUseCase(itemRep)
+    override val getItemService: GetItemService = new GetItemUseCase(itemRep)
+    override val signInService: SignInService = new SignInUseCase(userRep)
+    override val signOutService: SignOutService = new SignOutUseCase(userRep)
+    override val signUpService: SignUpService = new SignUpUseCase(userRep)
   }
 
   object ManualConfig extends ManualConfig
