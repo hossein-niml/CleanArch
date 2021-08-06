@@ -3,13 +3,14 @@ package usecase.auth
 import modules.exceptions._
 import contract.service.auth._
 import contract.callback.auth._
+import scala.util.{Success, Try}
 
 class SignUpUseCase(rep: UserCallback) extends SignUpService {
 
-  override def call(req: SignUpService.Request): Unit = {
-    val user = rep.getUserByName(req.username)
-    user match {
-      case Some(_) => throw Exceptions.reSignUp(req.username)
+  override def call(req: SignUpService.Request): Try[Unit] = Try {
+    val userTry = rep.getUserByName(req.username)
+    userTry match {
+      case Success(_) => throw Exceptions.reSignUp(req.username)
       case _ => rep.add(req.username, req.password)
     }
   }
