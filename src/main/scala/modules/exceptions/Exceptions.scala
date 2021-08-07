@@ -1,6 +1,8 @@
 package modules.exceptions
 
 object Exceptions {
+  val notFound: Exception = new Exception(s"Error: Not found")
+
   val userNotFound: Exception = new Exception(s"Error: User not found")
 
   val itemNotFound: Exception = new Exception(s"Error: Item not found")

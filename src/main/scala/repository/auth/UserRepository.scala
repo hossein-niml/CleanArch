@@ -6,6 +6,8 @@ import domain.auth._
 import domain.todo.Item
 import modules.exceptions.Exceptions
 import scala.util.Try
+import scala.util.Failure
+
 
 class UserRepository(users: DataBase[User], sessions: DataBase[Session], items: DataBase[Map[Int, Item]]) extends UserCallback {
 
@@ -35,14 +37,14 @@ class UserRepository(users: DataBase[User], sessions: DataBase[Session], items: 
 
   override def updateUser(user: User): Try[User] = Try {
     val id = user.id
-    users.update(id, user)
+    users.update(id, user).getOrElse(throw Exceptions.userNotFound)
   }
 
   override def updateSession(id: Int, session: Session):  Try[Session] = Try {
     val prevSession = sessions.get(id)
     prevSession match {
-      case None => throw Exceptions.userNotFound
-      case Some(_) => sessions.update(id, session)
+      case Failure(e) => throw e
+      case _ => sessions.update(id, session).getOrElse(throw Exceptions.userNotFound)
     }
   }
 }

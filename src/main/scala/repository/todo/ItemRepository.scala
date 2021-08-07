@@ -23,14 +23,14 @@ class ItemRepository(dataBase: DataBase[Map[Int, Item]]) extends ItemCallback {
     val userPrevItems = dataBase.get(userId).getOrElse(throw Exceptions.userNotFound)
     val updatedItem = userPrevItems.getOrElse(id, throw Exceptions.itemNotFound).setBody(newBody)
     val userUpdatedItems = userPrevItems + (id -> updatedItem)
-    dataBase.update(userId, userUpdatedItems)
+    dataBase.update(userId, userUpdatedItems).getOrElse(throw Exceptions.userNotFound)
   }
 
   override def editState(userId: Int, id: Int, newState: Boolean): Try[Map[Int, Item]] = Try {
     val userPrevItems = dataBase.get(userId).getOrElse(throw Exceptions.userNotFound)
     val updatedItem = userPrevItems.getOrElse(id, throw Exceptions.itemNotFound).setState(newState)
     val userUpdatedItems = userPrevItems + (id -> updatedItem)
-    dataBase.update(userId, userUpdatedItems)
+    dataBase.update(userId, userUpdatedItems).getOrElse(throw Exceptions.userNotFound)
   }
 
 }
