@@ -60,5 +60,4 @@ class CleanArchTest extends munit.FunSuite {
     showItems(toDo, userId = 1, itemsIdRange = 1 to 4), //show hossein's items
   ))
 
-
 }
