@@ -2,26 +2,30 @@ import contract.service.auth._
 import contract.service.todo._
 import modules.config._
 import modules.exceptions.Exceptions
-
 import scala.util.Try
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class CleanArchTest extends munit.FunSuite {
+
+  val logger: Logger = LoggerFactory.getLogger("logger")
+  val toDo: Config = Config.ManualConfig
+
   def showItems(toDo: Config, userId: Int, itemsIdRange: Range): Try[Unit] = Try {
     val ids = itemsIdRange.toVector
     for {
       id <- ids
-    } println(toDo.getItemService.call(GetItemService.Request(userId, id)).getOrElse(throw Exceptions.itemNotFound).toString)
-    println("##########################")
+    } this.logger.info(toDo.getItemService.call(GetItemService.Request(userId, id)).getOrElse(throw Exceptions.itemNotFound).toString)
+
+    this.logger.info("##########################")
   }
 
   def doThis(jobs: Vector[Try[Any]]): Unit = {
     val failedJobs = jobs.filter(job => job.isFailure)
     for {
       job <- failedJobs
-    } println(job.toString)
+    } this.logger.error(job.toString)
   }
-
-  val toDo: Config = Config.ManualConfig
 
   doThis(Vector(
     //sign up 2 users
