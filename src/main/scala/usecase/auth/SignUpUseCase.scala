@@ -3,7 +3,8 @@ package usecase.auth
 import modules.exceptions._
 import contract.service.auth._
 import contract.callback.auth._
-import scala.util.{Success, Try}
+import scala.util.Try
+import scala.util.Success
 
 class SignUpUseCase(rep: UserCallback) extends SignUpService {
 

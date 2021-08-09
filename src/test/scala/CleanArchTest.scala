@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 class CleanArchTest extends munit.FunSuite {
 
   val logger: Logger = LoggerFactory.getLogger("logger")
+
   val toDo: Config = Config.ManualConfig
 
   def showItems(toDo: Config, userId: Int, itemsIdRange: Range): Try[Unit] = Try {

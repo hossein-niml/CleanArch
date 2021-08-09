@@ -49,8 +49,11 @@ class UserRepository(users: DataBase[User], sessions: DataBase[Session], items: 
   }
 }
 
+
 object UserRepository {
+
   def apply(users: DataBase[User], sessions: DataBase[Session], items: DataBase[Map[Int, Item]]): UserRepository = {
     new UserRepository(users, sessions, items)
   }
+
 }

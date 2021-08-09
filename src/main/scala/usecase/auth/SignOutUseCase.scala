@@ -3,7 +3,8 @@ package usecase.auth
 import modules.exceptions._
 import contract.service.auth._
 import contract.callback.auth._
-import scala.util.{Success, Try}
+import scala.util.Try
+import scala.util.Success
 
 class SignOutUseCase(rep: UserCallback) extends SignOutService {
 
@@ -14,4 +15,5 @@ class SignOutUseCase(rep: UserCallback) extends SignOutService {
       case _ => throw Exceptions.userNotFound
     }
   }
+
 }

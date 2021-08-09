@@ -1,6 +1,7 @@
 package modules.exceptions
 
 object Exceptions {
+
   val notFound: Exception = new Exception(s"Error: Not found")
 
   val userNotFound: Exception = new Exception(s"Error: User not found")
@@ -16,4 +17,5 @@ object Exceptions {
   def reSignUp(username: String): Exception = new Exception(s"Error: '$username' username has already taken")
 
   def reSignOut(userId: Int): Exception = new Exception(s"Error: User with id = $userId has already signed out")
+
 }

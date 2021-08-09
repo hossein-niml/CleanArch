@@ -35,8 +35,11 @@ class ItemRepository(dataBase: DataBase[Map[Int, Item]]) extends ItemCallback {
 
 }
 
+
 object ItemRepository {
+
   def apply(dataBase: DataBase[Map[Int, Item]]): ItemRepository = {
     new ItemRepository(dataBase)
   }
+
 }
