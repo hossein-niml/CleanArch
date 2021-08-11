@@ -59,13 +59,13 @@ object Config {
     override val userRep: UserCallback = UserRepository(users, sessions, items)
 
     //Services
-    override val addItemService: AddItemService = new AddItemUseCase(itemRep)
+    override val addItemService: AddItemService = new AddItemUseCase(itemRep, userRep)
 
-    override val editStateService: EditStateService = new EditStateUseCase(itemRep)
+    override val editStateService: EditStateService = new EditStateUseCase(itemRep, userRep)
 
-    override val editBodyService: EditBodyService = new EditBodyUseCase(itemRep)
+    override val editBodyService: EditBodyService = new EditBodyUseCase(itemRep, userRep)
 
-    override val getItemService: GetItemService = new GetItemUseCase(itemRep)
+    override val getItemService: GetItemService = new GetItemUseCase(itemRep, userRep)
 
     override val signInService: SignInService = new SignInUseCase(userRep)
 

@@ -1,9 +1,8 @@
 package contract.service.auth
 
 import contract.service._
-import scala.util.Try
 
-abstract class SignOutService extends Service[SignOutService.Request, Try[Unit]]
+abstract class SignOutService extends Service[SignOutService.Request, Unit]
 
 object SignOutService {
 

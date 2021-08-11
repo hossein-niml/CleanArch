@@ -1,36 +1,63 @@
 package repository.todo
 
 import contract.callback.todo._
-import modules.database.DataBase
+import modules.database._
 import domain.todo._
 import modules.exceptions.Exceptions
-import scala.util.Try
+
+import scala.annotation.tailrec
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class ItemRepository(dataBase: DataBase[Map[Int, Item]]) extends ItemCallback {
 
-  override def add(userId: Int, body: String, state: Boolean): Try[Unit] = Try {
+  implicit val ec: ExecutionContext = DataBase.ec
+
+  override def add(userId: Int, body: String, state: Boolean): Future[Map[Int, Item]] = {
+    @tailrec
+    def findNewId(map: Map[Int, Item], start: Int): Int = {
+      if(map.contains(start)) findNewId(map, start + 1) else start
+    }
     val newItem = Item(body, state)
-    val userPrevItems = dataBase.get(userId).getOrElse(Map.empty)
-    val newItemId = dataBase.findNewId(userPrevItems)
-    dataBase.update(userId, userPrevItems + (newItemId -> newItem))
+    val prevItems = dataBase.get(userId).getOrElse(Map.empty)
+    val newItemId = findNewId(map = prevItems, start = 1)
+    dataBase.update(userId, prevItems + (newItemId -> newItem))
   }
 
-  override def get(userId: Int): Try[Map[Int, Item]] = Try {
-    dataBase.get(userId).getOrElse(throw Exceptions.itemNotFound)
+  override def get(userId: Int): Future[Option[Map[Int, Item]]] = Future {
+    dataBase.get(userId)
   }
 
-  override def editBody(userId: Int, id: Int, newBody: String): Try[Map[Int, Item]] = Try {
-    val userPrevItems = dataBase.get(userId).getOrElse(throw Exceptions.userNotFound)
-    val updatedItem = userPrevItems.getOrElse(id, throw Exceptions.itemNotFound).setBody(newBody)
-    val userUpdatedItems = userPrevItems + (id -> updatedItem)
-    dataBase.update(userId, userUpdatedItems).getOrElse(throw Exceptions.userNotFound)
+  override def editBody(userId: Int, id: Int, newBody: String): Future[Map[Int, Item]] = {
+    val userPrevItemsOption = dataBase.get(userId)
+    userPrevItemsOption match {
+      case None => Future.failed(Exceptions.userNotFound)
+      case Some(userPrevItems) =>
+        val itemOption = userPrevItems.get(id)
+        itemOption match {
+          case None => Future.failed(Exceptions.itemNotFound)
+          case Some(item) =>
+            val updatedItem = item.setBody(newBody)
+            val userUpdatedItems = userPrevItems + (id -> updatedItem)
+            dataBase.update(userId, userUpdatedItems)
+        }
+    }
   }
 
-  override def editState(userId: Int, id: Int, newState: Boolean): Try[Map[Int, Item]] = Try {
-    val userPrevItems = dataBase.get(userId).getOrElse(throw Exceptions.userNotFound)
-    val updatedItem = userPrevItems.getOrElse(id, throw Exceptions.itemNotFound).setState(newState)
-    val userUpdatedItems = userPrevItems + (id -> updatedItem)
-    dataBase.update(userId, userUpdatedItems).getOrElse(throw Exceptions.userNotFound)
+  override def editState(userId: Int, id: Int, newState: Boolean): Future[Map[Int, Item]] = {
+    val userPrevItemsOption = dataBase.get(userId)
+    userPrevItemsOption match {
+      case None => Future.failed(Exceptions.userNotFound)
+      case Some(userPrevItems) =>
+        val itemOption = userPrevItems.get(id)
+        itemOption match {
+          case None => Future.failed(Exceptions.itemNotFound)
+          case Some(item) =>
+            val updatedItem = item.setState(newState)
+            val userUpdatedItems = userPrevItems + (id -> updatedItem)
+            dataBase.update(userId, userUpdatedItems)
+        }
+    }
   }
 
 }

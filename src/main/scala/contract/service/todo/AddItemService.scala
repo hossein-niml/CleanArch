@@ -1,9 +1,9 @@
 package contract.service.todo
 
 import contract.service.Service
-import scala.util.Try
+import domain.todo.Item
 
-abstract class AddItemService extends Service[AddItemService.Request, Try[Unit]]
+abstract class AddItemService extends Service[AddItemService.Request, Map[Int, Item]]
 
 object AddItemService {
 

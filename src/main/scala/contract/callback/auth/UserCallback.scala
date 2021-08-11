@@ -1,20 +1,21 @@
 package contract.callback.auth
 
 import domain.auth._
-import scala.util.Try
+import scala.concurrent.Future
+
 
 abstract class UserCallback {
 
-  def add(username: String, password: String): Try[Unit]
+  def add(username: String, password: String): Future[Unit]
 
-  def getSessionById(id: Int): Try[Session]
+  def getSessionById(id: Int): Future[Option[Session]]
 
-  def getUserByName(username: String): Try[User]
+  def getUserByName(username: String): Future[Option[User]]
 
-  def remove(id: Int): Try[Unit]
+  def remove(id: Int): Future[Unit]
 
-  def updateUser(user: User): Try[User]
+  def updateUser(user: User): Future[User]
 
-  def updateSession(id: Int, session: Session): Try[Session]
+  def updateSession(id: Int, session: Session): Future[Session]
 
 }

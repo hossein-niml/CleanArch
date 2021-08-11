@@ -2,9 +2,9 @@ package contract.service.todo
 
 import contract.service.Service
 import domain.todo.Item
-import scala.util.Try
 
-abstract class EditBodyService extends Service[EditBodyService.Request, Try[Map[Int, Item]]]
+
+abstract class EditBodyService extends Service[EditBodyService.Request, Map[Int, Item]]
 
 object EditBodyService {
 

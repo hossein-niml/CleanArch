@@ -4,15 +4,16 @@ import contract.callback.auth._
 import modules.database._
 import domain.auth._
 import domain.todo.Item
-import modules.exceptions.Exceptions
-import scala.util.Try
-import scala.util.Failure
 
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class UserRepository(users: DataBase[User], sessions: DataBase[Session], items: DataBase[Map[Int, Item]]) extends UserCallback {
 
-  override def add(username: String, password: String): Try[Unit] = Try {
-    val newId = users.findNewId(users.map)
+  implicit val ec: ExecutionContext = DataBase.ec
+
+  override def add(username: String, password: String): Future[Unit] = {
+    val newId = users.lastNewId
     val user = User(newId, username, password)
     val isLogin = false
     val session = Session(newId, isLogin)
@@ -21,32 +22,28 @@ class UserRepository(users: DataBase[User], sessions: DataBase[Session], items: 
     items.add(Map.empty)
   }
 
-  override def getSessionById(id: Int): Try[Session] = Try {
-    sessions.get(id).getOrElse(throw Exceptions.userNotFound)
+  override def getSessionById(id: Int): Future[Option[Session]] = Future {
+    sessions.get(id)
   }
 
-  override def getUserByName(username: String): Try[User] = Try {
-    users.map.values.find(_.username == username).getOrElse(throw Exceptions.userNotFound)
+  override def getUserByName(username: String): Future[Option[User]] = Future {
+    users.map.values.find(_.username == username)
   }
 
-  override def remove(id: Int): Try[Unit] = Try {
+  override def remove(id: Int): Future[Unit] = {
     users.delete(id)
     sessions.delete(id)
     items.delete(id)
   }
 
-  override def updateUser(user: User): Try[User] = Try {
-    val id = user.id
-    users.update(id, user).getOrElse(throw Exceptions.userNotFound)
+  override def updateUser(user: User): Future[User] = {
+    users.update(user.id, user)
   }
 
-  override def updateSession(id: Int, session: Session):  Try[Session] = Try {
-    val prevSession = sessions.get(id)
-    prevSession match {
-      case Failure(e) => throw e
-      case _ => sessions.update(id, session).getOrElse(throw Exceptions.userNotFound)
-    }
+  override def updateSession(id: Int, session: Session): Future[Session] = {
+    sessions.update(id, session)
   }
+
 }
 
 

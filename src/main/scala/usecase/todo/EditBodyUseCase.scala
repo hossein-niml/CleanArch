@@ -1,14 +1,22 @@
 package usecase.todo
 
+import contract.callback.auth._
 import contract.callback.todo._
 import contract.service.todo._
 import domain.todo.Item
-import scala.util.Try
+import modules.exceptions.Exceptions
 
-class EditBodyUseCase(itemCallback: ItemCallback) extends EditBodyService {
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
-  override def call(req: EditBodyService.Request): Try[Map[Int, Item]] = {
-    itemCallback.editBody(req.userId, req.id, req.newBody)
-  }
+class EditBodyUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends EditBodyService {
+
+  override def call(req: EditBodyService.Request)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = for {
+    sessionOption <- userCallback.getSessionById(req.userId)
+    session <- sessionOption match {
+      case Some(_) => itemCallback.editBody(req.userId, req.id, req.newBody)
+      case None => Future.failed(Exceptions.userNotFound)
+    }
+  } yield session
 
 }

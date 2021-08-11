@@ -1,39 +1,55 @@
 package modules.database
 
-import modules.exceptions._
-import scala.annotation.tailrec
-import scala.util.Try
+import modules.exceptions.Exceptions
 
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class DataBase[T] {
 
+  implicit val ec: ExecutionContext = DataBase.ec
+
   var map: Map[Int, T] = Map.empty
 
-  def findNewId(map: Map[Int, _]): Int = {
-    @tailrec
-    def findNewIdHelper(i: Int): Int = {
-      if (map.contains(i)) findNewIdHelper(i + 1) else i
+  var lastNewId: Int = 1
+
+  def get(id: Int): Option[T] = {
+    map.get(id)
+  }
+
+  def add(item: T): Future[Unit] = Future {
+    map synchronized {
+      map = map + (lastNewId -> item)
+      lastNewId = lastNewId + 1
     }
-
-    findNewIdHelper(1)
   }
 
-  def get(id: Int): Try[T] = Try {
-    map.getOrElse(id, throw Exceptions.notFound)
+  def update(id: Int, item: T): Future[T] = {
+    val prev = map.get(id)
+    prev match {
+      case None => Future.failed(Exceptions.notFound)
+
+      case _ =>
+        Future {
+          map synchronized {
+            map = map + (id -> item)
+          }
+          item
+        }
+    }
   }
 
-  def add(item: T): Try[Unit] = Try {
-    val newId = findNewId(map)
-    map = map + (newId -> item)
+  def delete(id: Int): Future[Unit] = Future {
+    map synchronized {
+      map = map.-(id)
+    }
   }
 
-  def update(id: Int, item: T): Try[T] = Try {
-    map = map + (id -> item)
-    item
-  }
+}
 
-  def delete(id: Int): Try[Unit] = Try {
-    map = map.-(id)
-  }
+object DataBase {
+
+  val ec: ExecutionContext = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
 }
