@@ -3,16 +3,12 @@ import contract.service.todo._
 import domain.todo.Item
 import modules.config._
 
-import scala.util.{Failure, Success, Try}
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import modules.database._
-import modules.exceptions
-import modules.exceptions.Exceptions
-
-import java.lang.Exception
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
 
 class CleanArchTest extends munit.FunSuite {
 
