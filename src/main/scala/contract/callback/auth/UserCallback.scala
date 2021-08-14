@@ -8,14 +8,10 @@ abstract class UserCallback {
 
   def add(username: String, password: String): Future[Unit]
 
-  def getSessionById(id: Int): Future[Option[Session]]
-
-  def getUserByName(username: String): Future[Option[User]]
+  def getByName(username: String): Future[Option[User]]
 
   def remove(id: Int): Future[Unit]
 
-  def updateUser(user: User): Future[User]
-
-  def updateSession(id: Int, session: Session): Future[Session]
+  def update(user: User): Future[User]
 
 }

@@ -9,10 +9,10 @@ import modules.exceptions.Exceptions
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class EditBodyUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends EditBodyService {
+class EditBodyUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallback) extends EditBodyService {
 
   override def call(req: EditBodyService.Request)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = for {
-    sessionOption <- userCallback.getSessionById(req.userId)
+    sessionOption <- sessionCallback.getById(req.userId)
     session <- sessionOption match {
       case Some(_) => itemCallback.editBody(req.userId, req.id, req.newBody)
       case None => Future.failed(Exceptions.userNotFound)

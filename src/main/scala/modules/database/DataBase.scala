@@ -6,7 +6,7 @@ import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class DataBase[T] {
+trait DataBase[T] {
 
   implicit val ec: ExecutionContext = DataBase.ec
 
@@ -25,19 +25,11 @@ class DataBase[T] {
     }
   }
 
-  def update(id: Int, item: T): Future[T] = {
-    val prev = map.get(id)
-    prev match {
-      case None => Future.failed(Exceptions.notFound)
-
-      case _ =>
-        Future {
-          map synchronized {
-            map = map + (id -> item)
-          }
-          item
-        }
+  def update(id: Int, item: T): Future[T] = Future {
+    map synchronized {
+      map = map + (id -> item)
     }
+    item
   }
 
   def delete(id: Int): Future[Unit] = Future {

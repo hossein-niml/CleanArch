@@ -7,13 +7,18 @@ import contract.callback.auth._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class SignUpUseCase(rep: UserCallback) extends SignUpService {
+class SignUpUseCase(userCallback: UserCallback, sessionCallback: SessionCallback) extends SignUpService {
 
   override def call(req: SignUpService.Request)(implicit ec: ExecutionContext): Future[Unit] = for {
-    userOption <- rep.getUserByName(req.username)
-    result <- userOption match {
+    userOption <- userCallback.getByName(req.username)
+    _ <- userOption match {
       case Some(_) => Future.failed(Exceptions.reSignUp(req.username))
-      case _ => rep.add(req.username, req.password)
+      case _ => userCallback.add(req.username, req.password)
+    }
+    newUserOption <- userCallback.getByName(req.username)
+    result <- newUserOption match {
+      case None => Future.failed(Exceptions.userNotFound)
+      case Some(user) => sessionCallback.add(user.id)
     }
   } yield result
 

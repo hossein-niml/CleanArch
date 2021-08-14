@@ -8,15 +8,15 @@ import modules.exceptions._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class SignInUseCase(rep: UserCallback) extends SignInService {
+class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback) extends SignInService {
 
   override def call(req: SignInService.Request)(implicit ec: ExecutionContext): Future[Session] = for {
-    userOption <- rep.getUserByName(req.username)
+    userOption <- userCallback.getByName(req.username)
     user <- userOption match {
       case Some(user) => Future.successful(user)
       case None => Future.failed(Exceptions.invalidUserName)
     }
-    sessionOption <- rep.getSessionById(user.id)
+    sessionOption <- sessionCallback.getById(user.id)
     session <- sessionOption match {
       case Some(session) => Future.successful(session)
       case None => Future.failed(Exceptions.invalidUserName)
@@ -26,7 +26,7 @@ class SignInUseCase(rep: UserCallback) extends SignInService {
     } else if (user.password != req.password) {
       Future.failed(Exceptions.invalidPassword)
     } else {
-      rep.updateSession(user.id, session.setLogin(true))
+      sessionCallback.update(session.setLogin(true))
     }
   } yield result
 

@@ -9,15 +9,15 @@ import modules.exceptions.Exceptions
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class GetItemUseCase(itemCallback: ItemCallback, userCallback: UserCallback) extends GetItemService {
+class GetItemUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallback) extends GetItemService {
 
   override def call(req: GetItemService.Request)(implicit ec: ExecutionContext): Future[Item] = for {
-    sessionOption <- userCallback.getSessionById(req.userId)
-    session <- sessionOption match {
+    sessionOption <- sessionCallback.getById(req.userId)
+    _ <- sessionOption match {
       case Some(session) => Future.successful(session)
       case None => Future.failed(Exceptions.userNotFound)
     }
-    itemsOption <- itemCallback.get(req.userId)
+    itemsOption <- itemCallback.getById(req.userId)
     item <- itemsOption match {
       case Some(itemsMap) =>
         val itemOption = itemsMap.get(req.id)

@@ -7,19 +7,19 @@ import contract.callback.auth._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 
-class SignOutUseCase(rep: UserCallback) extends SignOutService {
+class SignOutUseCase(sessionCallback: SessionCallback) extends SignOutService {
 
   override def call(req: SignOutService.Request)(implicit ec: ExecutionContext): Future[Unit] = for {
-    sessionOption <- rep.getSessionById(req.userID)
-    result <- sessionOption match {
+    sessionOption <- sessionCallback.getById(req.userID)
+    _ <- sessionOption match {
       case Some(session) =>
         if (session.isLogin) {
-          rep.updateSession(req.userID, session.setLogin(false))
+          sessionCallback.update(session.setLogin(false))
         } else {
           Future.failed(Exceptions.reSignOut(req.userID))
         }
       case _ => Future.failed(Exceptions.userNotFound)
     }
-  } yield result
+  } yield ()
 
 }
