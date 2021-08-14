@@ -51,25 +51,25 @@ class CleanArchTest extends munit.FunSuite {
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
 
-  Await.result(toDo.signInService.call(SignInService.Request("ali", "000")), Duration("1 seconds"))
+  Await.result(toDo.signInService.call(SignInService.Request("ali", "000")), Duration("2 seconds"))
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false)), Duration("1 seconds"))
+  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false)), Duration("2 seconds"))
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false)), Duration("1 seconds"))
+  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false)), Duration("2 seconds"))
 
   showItems(toDo, userId = 2, itemsIdRange = 1 to 2)
 
-  Await.result(toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true)), Duration("1 seconds"))
+  Await.result(toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true)), Duration("2 seconds"))
 
-  Await.result(toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item")), Duration("1 seconds"))
+  Await.result(toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item")), Duration("2 seconds"))
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
 
-  Await.result(toDo.signOutService.call(SignOutService.Request(userID = 1)), Duration("1 seconds"))
+  Await.result(toDo.signOutService.call(SignOutService.Request(userID = 1)), Duration("2 seconds"))
 
-  Await.result(toDo.signInService.call(SignInService.Request("hossein", "123456")), Duration("1 seconds"))
+  Await.result(toDo.signInService.call(SignInService.Request("hossein", "123456")), Duration("2 seconds"))
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false)), Duration("1 seconds"))
+  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false)), Duration("2 seconds"))
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 4)
 
