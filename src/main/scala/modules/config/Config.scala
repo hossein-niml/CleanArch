@@ -43,6 +43,7 @@ object Config {
   class ManualConfig extends Config {
 
     //Repositories
+
     override val itemRep: ItemCallback = new ItemRepository
 
     override val userRep: UserCallback = new UserRepository
@@ -50,6 +51,7 @@ object Config {
     override val sessionRep: SessionCallback = new SessionRepository
 
     //Services
+
     override val addItemService: AddItemService = new AddItemUseCase(itemRep, sessionRep)
 
     override val editStateService: EditStateService = new EditStateUseCase(itemRep, sessionRep)
@@ -63,6 +65,7 @@ object Config {
     override val signOutService: SignOutService = new SignOutUseCase(sessionRep)
 
     override val signUpService: SignUpService = new SignUpUseCase(userRep, sessionRep)
+
   }
 
   object ManualConfig extends ManualConfig

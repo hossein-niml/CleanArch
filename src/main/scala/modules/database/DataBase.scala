@@ -1,7 +1,5 @@
 package modules.database
 
-import modules.exceptions.Exceptions
-
 import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
