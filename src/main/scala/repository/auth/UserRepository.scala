@@ -18,7 +18,7 @@ class UserRepository extends UserCallback with DataBase[User] {
     map.values.find(_.username == username)
   }
 
-  override def remove(id: Int): Future[Unit] = {
+  override def remove(id: Long): Future[Unit] = {
     delete(id)
   }
 

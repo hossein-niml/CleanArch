@@ -8,11 +8,11 @@ trait DataBase[T] {
 
   implicit val ec: ExecutionContext = DataBase.ec
 
-  var map: Map[Int, T] = Map.empty
+  var map: Map[Long, T] = Map.empty
 
-  var lastNewId: Int = 1
+  var lastNewId: Long = 1
 
-  def get(id: Int): Option[T] = {
+  def get(id: Long): Option[T] = {
     map.get(id)
   }
 
@@ -23,14 +23,14 @@ trait DataBase[T] {
     }
   }
 
-  def update(id: Int, item: T): Future[T] = Future {
+  def update(id: Long, item: T): Future[T] = Future {
     map synchronized {
       map = map + (id -> item)
     }
     item
   }
 
-  def delete(id: Int): Future[Unit] = Future {
+  def delete(id: Long): Future[Unit] = Future {
     map synchronized {
       map = map.-(id)
     }

@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext
 
 class EditBodyUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallback) extends EditBodyService {
 
-  override def call(req: EditBodyService.Request)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = for {
+  override def call(req: EditBodyService.Request)(implicit ec: ExecutionContext): Future[Map[Long, Item]] = for {
     sessionOption <- sessionCallback.getById(req.userId)
     session <- sessionOption match {
       case Some(_) => itemCallback.editBody(req.userId, req.id, req.newBody)

@@ -4,10 +4,10 @@ import contract.service.Service
 import domain.todo.Item
 
 
-abstract class EditBodyService extends Service[EditBodyService.Request, Map[Int, Item]]
+abstract class EditBodyService extends Service[EditBodyService.Request, Map[Long, Item]]
 
 object EditBodyService {
 
-  case class Request(userId: Int, id: Int, newBody: String)
+  case class Request(userId: Long, id: Long, newBody: String)
 
 }

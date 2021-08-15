@@ -16,6 +16,6 @@ object Exceptions {
 
   def reSignUp(username: String): Exception = new Exception(s"Error: '$username' username has already taken")
 
-  def reSignOut(userId: Int): Exception = new Exception(s"Error: User with id = $userId has already signed out")
+  def reSignOut(userId: Long): Exception = new Exception(s"Error: User with id = $userId has already signed out")
 
 }

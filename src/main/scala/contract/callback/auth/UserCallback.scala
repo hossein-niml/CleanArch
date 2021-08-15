@@ -10,7 +10,7 @@ abstract class UserCallback {
 
   def getByName(username: String): Future[Option[User]]
 
-  def remove(id: Int): Future[Unit]
+  def remove(id: Long): Future[Unit]
 
   def update(user: User): Future[User]
 

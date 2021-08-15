@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext
 
 class AddItemUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallback) extends AddItemService {
 
-  override def call(req: AddItemService.Request)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = for {
+  override def call(req: AddItemService.Request)(implicit ec: ExecutionContext): Future[Map[Long, Item]] = for {
     sessionOption <- sessionCallback.getById(req.userId)
     session <- sessionOption match {
       case Some(_) => itemCallback.add(req.userId, req.body, req.state)

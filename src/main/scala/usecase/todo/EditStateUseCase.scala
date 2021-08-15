@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext
 
 class EditStateUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallback) extends EditStateService {
 
-  override def call(req: EditStateService.Request)(implicit ec: ExecutionContext): Future[Map[Int, Item]] = for {
+  override def call(req: EditStateService.Request)(implicit ec: ExecutionContext): Future[Map[Long, Item]] = for {
     sessionOption <- sessionCallback.getById(req.userId)
     session <- sessionOption match {
       case Some(_) => itemCallback.editState(req.userId, req.id, req.newState)

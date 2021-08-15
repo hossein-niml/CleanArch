@@ -8,6 +8,6 @@ abstract class GetItemService extends Service[GetItemService.Request, Item]
 
 object GetItemService {
 
-  case class Request(userId: Int, id: Int)
+  case class Request(userId: Long, id: Long)
 
 }

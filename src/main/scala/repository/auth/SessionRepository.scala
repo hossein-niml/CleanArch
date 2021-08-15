@@ -8,16 +8,16 @@ import scala.concurrent.Future
 
 class SessionRepository extends SessionCallback with DataBase[Session] {
 
-  override def add(userId: Int): Future[Unit] = {
+  override def add(userId: Long): Future[Unit] = {
     val session = Session(userId, isLogin = false)
     add(session)
   }
 
-  override def getById(userId: Int): Future[Option[Session]] = Future {
+  override def getById(userId: Long): Future[Option[Session]] = Future {
     get(userId)
   }
 
-  override def remove(id: Int): Future[Unit] = {
+  override def remove(id: Long): Future[Unit] = {
     delete(id)
   }
 

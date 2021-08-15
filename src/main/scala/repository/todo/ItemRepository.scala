@@ -8,11 +8,11 @@ import modules.exceptions.Exceptions
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
-class ItemRepository extends ItemCallback with DataBase[Map[Int, Item]] {
+class ItemRepository extends ItemCallback with DataBase[Map[Long, Item]] {
 
-  override def add(userId: Int, body: String, state: Boolean): Future[Map[Int, Item]] = {
+  override def add(userId: Long, body: String, state: Boolean): Future[Map[Long, Item]] = {
     @tailrec
-    def findNewId(map: Map[Int, Item], start: Int): Int = {
+    def findNewId(map: Map[Long, Item], start: Long): Long = {
       if(map.contains(start)) findNewId(map, start + 1) else start
     }
     val newItem = Item(body, state)
@@ -21,11 +21,11 @@ class ItemRepository extends ItemCallback with DataBase[Map[Int, Item]] {
     update(userId, prevItems + (newItemId -> newItem))
   }
 
-  override def getById(userId: Int): Future[Option[Map[Int, Item]]] = Future {
+  override def getById(userId: Long): Future[Option[Map[Long, Item]]] = Future {
     get(userId)
   }
 
-  override def editBody(userId: Int, id: Int, newBody: String): Future[Map[Int, Item]] = {
+  override def editBody(userId: Long, id: Long, newBody: String): Future[Map[Long, Item]] = {
     val userPrevItemsOption = get(userId)
     userPrevItemsOption match {
       case None => Future.failed(Exceptions.userNotFound)
@@ -41,7 +41,7 @@ class ItemRepository extends ItemCallback with DataBase[Map[Int, Item]] {
     }
   }
 
-  override def editState(userId: Int, id: Int, newState: Boolean): Future[Map[Int, Item]] = {
+  override def editState(userId: Long, id: Long, newState: Boolean): Future[Map[Long, Item]] = {
     val userPrevItemsOption = get(userId)
     userPrevItemsOption match {
       case None => Future.failed(Exceptions.userNotFound)
