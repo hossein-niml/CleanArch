@@ -2,13 +2,13 @@ import contract.service.auth._
 import contract.service.todo._
 import domain.todo.Item
 import modules.config._
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import modules.database._
-import scala.concurrent.duration.Duration
-import scala.concurrent.Await
+
+import java.lang.Thread.sleep
 import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class CleanArchTest extends munit.FunSuite {
 
@@ -18,13 +18,15 @@ class CleanArchTest extends munit.FunSuite {
 
   val toDo: Config = Config.ManualConfig
 
-  val waitTime: Duration = Duration("2 seconds")
+  val WAIT_TIME: Int = 1000
 
-  def getAllItems(toDo: Config, userId: Int, itemsIdRange: Range): Vector[Item] = {
+  def getAllItems(toDo: Config, userId: Int, itemsIdRange: Range): Vector[Future[Item]] = {
     val ids = itemsIdRange.toVector
-    for {
+    val result = for {
       id <- ids
-    } yield Await.result(toDo.getItemService.call(GetItemService.Request(userId, id)), waitTime)
+    } yield toDo.getItemService.call(GetItemService.Request(userId, id))
+    sleep(WAIT_TIME)
+    result
   }
 
   def showItems(toDo: Config, userId: Int, itemsIdRange: Range): Unit = {
@@ -35,39 +37,63 @@ class CleanArchTest extends munit.FunSuite {
     this.logger.info("##########################")
   }
 
-  Await.result(toDo.signUpService.call(SignUpService.Request("hossein", "123456")), waitTime)
+  toDo.signUpService.call(SignUpService.Request("hossein", "123456"))
 
-  Await.result(toDo.signUpService.call(SignUpService.Request("ali", "000")), waitTime)
+  toDo.signUpService.call(SignUpService.Request("ali", "000"))
 
-  Await.result(toDo.signInService.call(SignInService.Request("hossein", "123456")), waitTime)
+  sleep(WAIT_TIME)
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's first item", state = false)), waitTime)
+  toDo.signInService.call(SignInService.Request("hossein", "123456"))
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's second item", state = false)), waitTime)
+  sleep(WAIT_TIME)
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's third item :D", state = false)), waitTime)
+  toDo.addItemService.call(AddItemService.Request(1, "hossein's first item", state = false))
+
+  sleep(WAIT_TIME)
+
+  toDo.addItemService.call(AddItemService.Request(1, "hossein's second item", state = false))
+
+  sleep(WAIT_TIME)
+
+  toDo.addItemService.call(AddItemService.Request(1, "hossein's third item :D", state = false))
+
+  sleep(WAIT_TIME)
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
 
-  Await.result(toDo.signInService.call(SignInService.Request("ali", "000")), waitTime)
+  toDo.signInService.call(SignInService.Request("ali", "000"))
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false)), waitTime)
+  sleep(WAIT_TIME)
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false)), waitTime)
+  toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false))
+
+  sleep(WAIT_TIME)
+
+  toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false))
+
+  sleep(WAIT_TIME)
 
   showItems(toDo, userId = 2, itemsIdRange = 1 to 2)
 
-  Await.result(toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true)), waitTime)
+  toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true))
 
-  Await.result(toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item")), waitTime)
+  toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item"))
+
+  sleep(WAIT_TIME)
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
 
-  Await.result(toDo.signOutService.call(SignOutService.Request(userID = 1)), waitTime)
+  toDo.signOutService.call(SignOutService.Request(userID = 1))
 
-  Await.result(toDo.signInService.call(SignInService.Request("hossein", "123456")), waitTime)
+  sleep(WAIT_TIME)
 
-  Await.result(toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false)), waitTime)
+  toDo.signInService.call(SignInService.Request("hossein", "123456"))
+
+  sleep(WAIT_TIME)
+
+  toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false))
+
+  sleep(WAIT_TIME)
 
   showItems(toDo, userId = 1, itemsIdRange = 1 to 4)
 
