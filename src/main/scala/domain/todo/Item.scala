@@ -1,6 +1,6 @@
 package domain.todo
 
-case class Item(body: String, state: Boolean) {
+case class Item(id: Long, body: String, state: Boolean) {
 
   def setBody(body: String): Item = {
     copy(body = body)

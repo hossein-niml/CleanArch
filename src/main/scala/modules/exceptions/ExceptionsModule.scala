@@ -1,16 +1,16 @@
 package modules.exceptions
 
-object Exceptions {
+object ExceptionsModule {
 
   val notFound: Exception = new Exception(s"Error: Not found")
 
-  val userNotFound: Exception = new Exception(s"Error: User not found")
+  val userNotFound: Exception = new Exception(s"Error: Incorrect Username or Password")
 
   val itemNotFound: Exception = new Exception(s"Error: Item not found")
 
-  val invalidUserName: Exception = new Exception(s"Error: Username is not correct")
+  val invalidUserName: Exception = new Exception(s"Error: Incorrect Username or Password")
 
-  val invalidPassword: Exception = new Exception(s"Error: Password is not correct")
+  val invalidPassword: Exception = new Exception(s"Error: Incorrect Username or Password")
 
   def reSignIn(username: String): Exception = new Exception(s"Error: '$username' user has already signed in")
 

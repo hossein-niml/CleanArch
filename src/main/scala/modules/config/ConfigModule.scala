@@ -9,7 +9,7 @@ import repository.auth._
 import usecase.todo._
 import usecase.auth._
 
-abstract class Config {
+abstract class ConfigModule {
 
   //Repositories
 
@@ -38,9 +38,9 @@ abstract class Config {
 }
 
 
-object Config {
+object ConfigModule {
 
-  class ManualConfig extends Config {
+  class ManualConfig extends ConfigModule {
 
     //Repositories
 

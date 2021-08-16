@@ -2,25 +2,23 @@ import contract.service.auth._
 import contract.service.todo._
 import domain.todo.Item
 import modules.config._
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import modules.database._
+import org.slf4j.{Logger, LoggerFactory}
 
 import java.lang.Thread.sleep
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import java.util.concurrent.Executors
+import scala.concurrent.{ExecutionContext, Future}
 
 class CleanArchTest extends munit.FunSuite {
 
-  implicit val ec: ExecutionContext = DataBase.ec
+  implicit val ec: ExecutionContext = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
-  val logger: Logger = LoggerFactory.getLogger("logger")
+  val logger: Logger = LoggerFactory.getLogger(classOf[CleanArchTest])
 
-  val toDo: Config = Config.ManualConfig
+  val toDo: ConfigModule = ConfigModule.ManualConfig
 
-  val WAIT_TIME: Int = 1000
+  val WAIT_TIME: Int = 100
 
-  def getAllItems(toDo: Config, userId: Int, itemsIdRange: Range): Vector[Future[Item]] = {
+  def getAllItems(toDo: ConfigModule, userId: Int, itemsIdRange: Range): Vector[Future[Item]] = {
     val ids = itemsIdRange.toVector
     val result = for {
       id <- ids
@@ -29,7 +27,7 @@ class CleanArchTest extends munit.FunSuite {
     result
   }
 
-  def showItems(toDo: Config, userId: Int, itemsIdRange: Range): Unit = {
+  def showItems(toDo: ConfigModule, userId: Int, itemsIdRange: Range): Unit = {
     val items = getAllItems(toDo, userId, itemsIdRange)
     for {
       item <- items
@@ -37,64 +35,22 @@ class CleanArchTest extends munit.FunSuite {
     this.logger.info("##########################")
   }
 
-  toDo.signUpService.call(SignUpService.Request("hossein", "123456"))
-
-  toDo.signUpService.call(SignUpService.Request("ali", "000"))
-
-  sleep(WAIT_TIME)
-
-  toDo.signInService.call(SignInService.Request("hossein", "123456"))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(1, "hossein's first item", state = false))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(1, "hossein's second item", state = false))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(1, "hossein's third item :D", state = false))
-
-  sleep(WAIT_TIME)
-
-  showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
-
-  toDo.signInService.call(SignInService.Request("ali", "000"))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false))
-
-  sleep(WAIT_TIME)
-
-  showItems(toDo, userId = 2, itemsIdRange = 1 to 2)
-
-  toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true))
-
-  toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item"))
-
-  sleep(WAIT_TIME)
-
-  showItems(toDo, userId = 1, itemsIdRange = 1 to 3)
-
-  toDo.signOutService.call(SignOutService.Request(userID = 1))
-
-  sleep(WAIT_TIME)
-
-  toDo.signInService.call(SignInService.Request("hossein", "123456"))
-
-  sleep(WAIT_TIME)
-
-  toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false))
-
-  sleep(WAIT_TIME)
-
-  showItems(toDo, userId = 1, itemsIdRange = 1 to 4)
+  for {
+    _ <- toDo.signUpService.call(SignUpService.Request("hossein", "000"))
+    _ <- toDo.addItemService.call(AddItemService.Request(1, "hossein's first item", state = false))
+    _ <- toDo.signUpService.call(SignUpService.Request("ali", "000"))
+    _ <- toDo.signInService.call(SignInService.Request("hossein", "123456"))
+    _ <- toDo.addItemService.call(AddItemService.Request(1, "hossein's first item", state = false))
+    _ <- toDo.addItemService.call(AddItemService.Request(1, "hossein's second item", state = false))
+    _ <- toDo.addItemService.call(AddItemService.Request(1, "hossein's third item :D", state = false))
+    _ <- toDo.signInService.call(SignInService.Request("ali", "000"))
+    _ <- toDo.addItemService.call(AddItemService.Request(2, "ali's first item", state = false))
+    _ <- toDo.addItemService.call(AddItemService.Request(2, "ali's second item", state = false))
+    _ <- toDo.editStateService.call(EditStateService.Request(userId = 1, id = 1, newState = true))
+    _ <- toDo.editBodyService.call(EditBodyService.Request(userId = 1, id = 2, newBody = "hossein is CHANGING second item"))
+    _ <- toDo.signOutService.call(SignOutService.Request(userID = 1))
+    _ <- toDo.signInService.call(SignInService.Request("hossein", "123456"))
+    _ <- toDo.addItemService.call(AddItemService.Request(1, "hossein's NEWWW item", state = false))
+  } ()
 
 }

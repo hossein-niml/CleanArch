@@ -1,17 +1,19 @@
 package repository.auth
 
 import contract.callback.auth._
-import modules.database._
 import domain.auth._
+import modules.database._
 
 import scala.concurrent.Future
 
-class UserRepository extends UserCallback with DataBase[User] {
+class UserRepository extends UserCallback with DataBaseModule[User] {
 
   override def add(username: String, password: String): Future[Unit] = {
-    val newId = lastNewId
-    val user = User(newId, username, password)
-    add(user)
+    synchronized {
+      val newId = lastNewId
+      val user = User(newId, username, password)
+      add(user)
+    }
   }
 
   override def getByName(username: String): Future[Option[User]] = Future {

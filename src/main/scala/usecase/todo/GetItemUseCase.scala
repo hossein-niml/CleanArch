@@ -4,7 +4,7 @@ import contract.callback.todo._
 import contract.callback.auth._
 import contract.service.todo._
 import domain.todo.Item
-import modules.exceptions.Exceptions
+import modules.exceptions.ExceptionsModule
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
@@ -15,7 +15,7 @@ class GetItemUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallbac
     sessionOption <- sessionCallback.getById(req.userId)
     _ <- sessionOption match {
       case Some(session) => Future.successful(session)
-      case None => Future.failed(Exceptions.userNotFound)
+      case None => Future.failed(ExceptionsModule.userNotFound)
     }
     itemsOption <- itemCallback.getById(req.userId)
     item <- itemsOption match {
@@ -23,9 +23,9 @@ class GetItemUseCase(itemCallback: ItemCallback, sessionCallback: SessionCallbac
         val itemOption = itemsMap.get(req.id)
         itemOption match {
           case Some(item) => Future.successful(item)
-          case None => Future.failed(Exceptions.itemNotFound)
+          case None => Future.failed(ExceptionsModule.itemNotFound)
         }
-      case None => Future.failed(Exceptions.itemNotFound)
+      case None => Future.failed(ExceptionsModule.itemNotFound)
     }
   } yield item
 

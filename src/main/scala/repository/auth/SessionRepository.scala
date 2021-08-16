@@ -6,7 +6,7 @@ import domain.auth._
 
 import scala.concurrent.Future
 
-class SessionRepository extends SessionCallback with DataBase[Session] {
+class SessionRepository extends SessionCallback with DataBaseModule[Session] {
 
   override def add(userId: Long): Future[Unit] = {
     val session = Session(userId, isLogin = false)

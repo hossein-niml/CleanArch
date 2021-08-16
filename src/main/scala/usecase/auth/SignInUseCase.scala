@@ -14,17 +14,17 @@ class SignInUseCase(userCallback: UserCallback, sessionCallback: SessionCallback
     userOption <- userCallback.getByName(req.username)
     user <- userOption match {
       case Some(user) => Future.successful(user)
-      case None => Future.failed(Exceptions.invalidUserName)
+      case None => Future.failed(ExceptionsModule.invalidUserName)
     }
     sessionOption <- sessionCallback.getById(user.id)
     session <- sessionOption match {
       case Some(session) => Future.successful(session)
-      case None => Future.failed(Exceptions.invalidUserName)
+      case None => Future.failed(ExceptionsModule.invalidUserName)
     }
     result <- if (session.isLogin) {
-      Future.failed(Exceptions.reSignIn(req.username))
+      Future.failed(ExceptionsModule.reSignIn(req.username))
     } else if (user.password != req.password) {
-      Future.failed(Exceptions.invalidPassword)
+      Future.failed(ExceptionsModule.invalidPassword)
     } else {
       sessionCallback.update(session.setLogin(true))
     }

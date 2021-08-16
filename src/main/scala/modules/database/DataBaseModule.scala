@@ -4,9 +4,9 @@ import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-trait DataBase[T] {
+trait DataBaseModule[T] {
 
-  implicit val ec: ExecutionContext = DataBase.ec
+  implicit val ec: ExecutionContext = DataBaseModule.ec
 
   var map: Map[Long, T] = Map.empty
 
@@ -38,8 +38,8 @@ trait DataBase[T] {
 
 }
 
-object DataBase {
+object DataBaseModule {
 
-  val ec: ExecutionContext = ExecutionContext fromExecutor Executors.newCachedThreadPool()
+  private val ec: ExecutionContext = ExecutionContext fromExecutor Executors.newCachedThreadPool()
 
 }

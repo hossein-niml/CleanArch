@@ -16,9 +16,9 @@ class SignOutUseCase(sessionCallback: SessionCallback) extends SignOutService {
         if (session.isLogin) {
           sessionCallback.update(session.setLogin(false))
         } else {
-          Future.failed(Exceptions.reSignOut(req.userID))
+          Future.failed(ExceptionsModule.reSignOut(req.userID))
         }
-      case _ => Future.failed(Exceptions.userNotFound)
+      case _ => Future.failed(ExceptionsModule.userNotFound)
     }
   } yield ()
 
