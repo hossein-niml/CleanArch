@@ -2,11 +2,13 @@ import contract.service.auth._
 import contract.service.todo._
 import domain.todo.Item
 import modules.config._
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 import java.lang.Thread.sleep
 import java.util.concurrent.Executors
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class CleanArchTest extends munit.FunSuite {
 
