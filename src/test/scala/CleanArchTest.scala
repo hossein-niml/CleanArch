@@ -1,13 +1,12 @@
 import contract.service.auth._
 import contract.service.todo._
-import domain.todo.Item
 import modules.config._
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.slf4j._
+import ch.qos.logback.classic
+import ch.qos.logback.classic.LoggerContext
+import ch.qos.logback.core.util.StatusPrinter
 
-import java.lang.Thread.sleep
 import java.util.concurrent.Executors
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 import scala.util.Failure
@@ -21,24 +20,7 @@ class CleanArchTest extends munit.FunSuite {
 
   val toDo: ConfigModule = ConfigModule.ManualConfig
 
-  val WAIT_TIME: Int = 100
-
-  def getAllItems(toDo: ConfigModule, userId: Int, itemsIdRange: Range): Vector[Future[Item]] = {
-    val ids = itemsIdRange.toVector
-    val result = for {
-      id <- ids
-    } yield toDo.getItemService.call(GetItemService.Request(userId, id))
-    sleep(WAIT_TIME)
-    result
-  }
-
-  def showItems(toDo: ConfigModule, userId: Int, itemsIdRange: Range): Unit = {
-    val items = getAllItems(toDo, userId, itemsIdRange)
-    for {
-      item <- items
-    } this.logger.info(item.toString)
-    this.logger.info("##########################")
-  }
+  val lc: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
 
   for {
 
